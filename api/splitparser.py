@@ -40,7 +40,7 @@ def _btn(s,tag):
     for x in k[1:]:
         endl = x.split(' ',1)
         xl = None
-        for eol in '.,:':
+        for eol in '.,:()':
             if endl[0].endswith(eol):
                 xl = _settag(endl[0][:-1],tag) + eol + ' ' + ' '.join(endl[1:])
         if xl is None: xl = _settag(endl[0],tag) + ' ' + ' '.join(endl[1:])
