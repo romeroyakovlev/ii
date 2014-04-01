@@ -1,0 +1,62 @@
+%import api.sx as sx, points
+
+%include tpl/01.tpl r=r
+
+<body>
+
+<div class="row">
+
+    <div class="small-3 columns">
+        <a href="/{{ea}}" class="secondary button expand">
+          {{ea}}
+        </a>
+    </div>
+
+    <div class="small-9 columns">
+     <span class="right">
+%uname, uaddr = points.check_hash(r.auth)
+%if uname:
+        <a href="/h/showhash" class="button">{{uname}} ({{r.NODE}},{{uaddr}})</a> <a class="alert button" href="/h/logout">logout</a>
+%end
+        <a href="/" title="Стартовая страница" class="secondary button"><i class="fa fa-home"></i></a>
+      </span>
+    </div>
+
+</div>
+
+
+<div class="row"><div class="twelve columns">
+
+%zubj = 'Re: %s' % r.rmsg.subj if r.repto else ''
+%if zubj and r.rmsg.subj.startswith('Re: '): zubj = r.rmsg.subj
+
+%if r.repto:
+<div class="panel">{{! sx.rend(r.rmsg.msg) }}</div>
+%else:
+<h4>Новое сообщение</h4>
+%end
+
+<hr>
+
+<form class="form-horizontal" role="form" method="post" action="/a/newmsg/{{ea}}">
+        <input type="hidden" name="repto" value="{{r.repto}}" />
+        <input type="hidden" name="msgto" value="{{r.rmsg.msgfrom if r.rmsg else 'All'}}" />
+        <input type="text" name="subj" value="{{zubj}}" class="form-control" id="subjInput" placeholder="subj">
+        <textarea name="msg" class="form-control" style="height:300px" placeholder="Текст сообщения"></textarea>
+%if not uname:
+        <input type="text" name="msgfrom" value="" class="form-control" id="exampleInput" placeholder="auth-ключ">
+%end
+
+
+  <button class="button secondary" type="submit" class="btn btn-default">Отправить комментарий</button>
+</form>
+
+    </div></div>
+
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+</body>
+</html>

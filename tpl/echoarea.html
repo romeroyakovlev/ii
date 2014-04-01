@@ -1,0 +1,94 @@
+%import api, api.sx as sx
+
+%include tpl/01.tpl r=r, rss=1
+
+%if r.getl.lim == 'big': j_ = j[-1000:]
+%elif not r.getl.lim: j_ = j[-100:]
+%else: j_ = j
+
+
+%ml = [(n,api.get_msg(n)) for n in j_]
+
+<body>
+
+%include tpl/01m.tpl r=r, ml=ml, j=j
+
+<div class="row">
+    <div class="small-12 columns">
+
+%if r.getl.rev and j != j_:
+<br />
+<div data-alert class="alert-box warning radius">
+Показываются только сообщения последней страницы.
+Чтобы начать читать тему вообще с самого начала, нажмите ссылку
+<a href="/{{r.ea}}?rev=1&lim=all">ВСЕ СООБЩЕНИЯ</a>
+</div>
+%end
+
+
+%if r.getl.rev: lst = ml
+%else: lst = reversed(ml)
+
+%for n,mo in lst:
+
+<hr />
+<a name="{{n}}"></a>
+<div class="row">
+    <div class="small-10 columns">
+
+        <div class="radius panel {{'' if mo.repto else 'callout'}}">
+            <p>
+%if mo.repto:
+             <a href="#{{mo.repto}}">{{mo.subj}}</a>
+%else:
+            <strong>{{mo.subj}}</strong>
+%end
+            <i class="fa fa-clock-o" title="{{sx.dateg(mo.date,'%d/%m %H:%M')}} UTC"></i>
+            <span class="pull-right">
+            <strong title="{{mo.addr}}">{{mo.msgfrom}}</strong> to {{mo.msgto}} <a href="/{{n}}" title="Ссылка на это сообщение"><i class="fa fa-eye"></i></a></p>
+
+%if mo.subj.startswith('bindata::'):
+        <a class="alert button" href="/data/{{n}}">{{mo.subj}}</a>
+%else:
+            <p>{{! sx.rend(mo.msg) }}</p>
+        </div>
+%end
+
+    </div>
+    <div class="small-2 columns">
+        <a href="/reply/{{r.ea}}/{{n}}"><img title="Кликни, чтобы ответить на это сообщение" src="http://ave.51t.ru/girl/width/120/hash/{{sx.hsh(mo.msgfrom.encode('utf-8'))}}" style="border-radius:8px" /></a>
+    </div>
+
+</div> <!-- row -->
+
+
+%end
+
+
+
+<hr />
+<footer>
+
+<div class="right"><a href="/" class="tiny secondary button">index</a></div>
+
+%if len(j) > 100:
+<dl class="sub-nav"> 
+    <dt>Сообщений на странице:</dt>
+%ri = ('rev',r.getl.rev)
+         <dd {{!'class="active"' if not r.getl.lim else ''}}><a href="/{{r.ea}}{{! sx.g_opts( ri )  }} ">100</a></dd>
+         <dd {{!'class="active"' if r.getl.lim == 'big' else ''}}><a href="/{{r.ea}}{{ sx.g_opts ( ri, ('lim','big') ) }} ">1000</a></dd>
+         <dd {{!'class="active"' if r.getl.lim == 'all' else ''}}><a href="/{{r.ea}}{{ sx.g_opts ( ri, ('lim','all') ) }} ">Все</a></dd>
+</dl>
+%end
+
+
+</footer>
+    </div></div>
+
+    <script src="/s/js/vendor/jquery.js"></script>
+    <script src="/s/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+</body>
+</html>

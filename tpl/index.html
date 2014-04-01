@@ -1,0 +1,53 @@
+%import api, api.sx as sx
+
+%include tpl/01.tpl r=r
+
+<body>
+<div class="row">
+    <div class="small-9 columns">
+    <h2><a href="/">ii</a> <small>персональное фидо у вас дома</small></h2>
+    </div>
+    <div class="small-3 columns">
+        <span class="right">
+            <a href="#" class="secondary button" data-dropdown="drop"><i class="fa fa-book"></i></a> 
+        <ul id="drop" class="f-dropdown" data-dropdown-content> 
+%for ea,n in lst:
+                        <li><a href="/{{ea}}">{{ea}} ({{len(n)}})</a></li>
+%end
+        </ul>
+        </span>
+    </div>
+
+    <div class="small-12 columns">
+%for ea,n in lst:
+%mo = api.get_msg(n[-1]) if n else ''
+
+<hr />
+<div class="row">
+    <h3><a href="/{{ea}}">{{ea}}</a> <i class="fa fa-envelope-o"></i> {{len(n)}}</h3>
+%if mo:
+    <div class="small-10 columns">
+        <div class="radius panel {{'' if mo.repto else 'callout'}}">
+            <p><strong>{{mo.subj}}</strong>
+            <i class="fa fa-clock-o"></i> {{sx.dateg(mo.date,'%d/%m %H:%M')}} UTC
+            <span class="pull-right">
+            <strong title="{{mo.addr}}">{{mo.msgfrom}}</strong> to {{mo.msgto}} <a href="/{{n[-1]}}" title="Ссылка на это сообщение"><i class="fa fa-eye"></i></a></p>
+            <p>{{! sx.rend(mo.msg) }}</p>
+        </div>
+    </div>
+    <div class="small-2 columns">
+        <a href="/reply/{{ea}}/{{n[-1]}}"><img title="Кликни, чтобы ответить на это сообщение" src="http://ave.51t.ru/girl/width/120/hash/{{sx.hsh(mo.msgfrom.encode('utf-8'))}}" style="border-radius:8px" /></a>
+    </div>
+%end
+</div>
+%end
+
+    </div></div>
+
+    <script src="/s/js/vendor/jquery.js"></script>
+    <script src="/s/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+</body>
+</html>

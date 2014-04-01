@@ -1,0 +1,42 @@
+%import api.sx as sx, api
+
+%include tpl/01.tpl r=r
+
+  <body>
+    <div class="row"><div class="small-12 columns">
+
+%for mo in lst:
+
+<hr />
+<a name="{{mo.msgid}}"></a>
+<div class="row">
+    <div class="small-10 columns">
+        <div class="radius panel">
+            <p>
+            <a class="tiny radius button" href="/{{mo.echoarea}}#{{mo.msgid}}">{{mo.echoarea}}</a>
+            <strong>{{mo.subj}}</strong>
+            <span class="fa fa-clock-o"></span> {{sx.dateg(mo.date,'%d/%m %H:%M')}} UTC</span>
+            <span class="pull-right"><strong title="{{mo.addr}}">{{mo.msgfrom}}</strong> to {{mo.msgto}}</p>
+
+            <p>{{! sx.rend(mo.msg) }}</p>
+        </div>
+
+    </div>
+    <div class="small-2 columns">
+        <a href="/reply/{{mo.echoarea}}/{{mo.msgid}}"><img title="Кликни, чтобы ответить на это сообщение" src="http://ave.51t.ru/girl/width/120/hash/{{sx.hsh(mo.msgfrom.encode('utf-8'))}}" style="border-radius:8px" /></a>
+    </div>
+
+</div> <!-- row -->
+
+%end
+
+    </div></div>
+
+
+    <script src="/s/js/vendor/jquery.js"></script>
+    <script src="/s/js/foundation.min.js"></script>
+    <script>
+      $(document).foundation();
+    </script>
+</body>
+</html>
