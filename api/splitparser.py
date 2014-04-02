@@ -24,7 +24,7 @@ def sp(s):
 def _ac(t):
     o = t
     if o.rstrip().startswith('&gt;'):
-        o = u'<em style="color:green">%s</em>\n' % o
+        o = u'<em style="color:green">%s</em>' % o
     if 'http://' in o:
         o = _btn(o,'http://')
     if 'https://' in o:
