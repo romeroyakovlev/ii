@@ -44,7 +44,7 @@ def _point_msg(pauth,tmsg,qp):
 
 @route('/<qp:re:z|u>/point/<pauth>/<tmsg>')
 def point_msg_get(qp,pauth,tmsg):
-    return _point_msg(qp,pauth,tmsg,qp)
+    return _point_msg(pauth,tmsg,qp)
 
 @post('/<qp:re:z|u>/point')
 def point_msg_get(qp):
