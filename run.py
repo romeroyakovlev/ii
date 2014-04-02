@@ -44,11 +44,11 @@ def _point_msg(pauth,tmsg,qp):
 
 @route('/<qp:re:z|u>/point/<pauth>/<tmsg>')
 def point_msg_get(qp,pauth,tmsg):
-    return _point_msg(qp,pauth,tmsg)
+    return _point_msg(qp,pauth,tmsg,qp)
 
 @post('/<qp:re:z|u>/point')
 def point_msg_get(qp):
-    return _point_msg(qp,request.forms.POST['pauth'],request.forms.POST['pauth'])
+    return _point_msg(request.POST['pauth'],request.POST['tmsg'],qp)
 
 @route('/m/<msg>')
 def get_msg(msg):
