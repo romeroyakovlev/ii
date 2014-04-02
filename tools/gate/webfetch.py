@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import urllib2, base64, zlib
+import urllib2, base64
 
 cfg = open('config.cfg').read().splitlines()
 
@@ -26,7 +26,7 @@ def sep(l,step=20):
         yield l[x:x+step]
 
 def unp(s):
-    return zlib.decompress(base64.urlsafe_b64decode(s)) 
+    return base64.b64decode(s.replace('-','+').replace('_','/'))
 
 def debundle(ea,s):
     for n in s.splitlines():
@@ -45,13 +45,13 @@ def walk_el(out):
     return el
 
 def parse():
-    out = getf('%sz/e/%s' % (cfg[1], '/'.join(cfg[2:])))
+    out = getf('%se/%s' % (cfg[1], '/'.join(cfg[2:])))
     el = walk_el(out)
     for ea in cfg[2:]:
         myel = set(get_echoarea(ea))
         dllist = [x for x in el[ea] if x not in myel]
         for dl in sep(dllist,40):
-            s = getf('%sz/m/%s' % (cfg[1], '/'.join(dl)))
+            s = getf('%sm/%s' % (cfg[1], '/'.join(dl)))
             debundle(ea,s)
 
 parse()

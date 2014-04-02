@@ -1,6 +1,6 @@
-import sys, zlib, base64
+import sys, base64
 
 for f in sys.argv[1:]:
     tx = open(f).read()
-    ctx = base64.urlsafe_b64encode( zlib.compress(tx,9) )
+    ctx = base64.b64encode( (tx) )
     open(f + '.toss','w').write(ctx)
