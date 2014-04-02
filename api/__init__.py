@@ -3,8 +3,8 @@
 import base64, zlib, sx, flt
 
 def b64c(s,us):
-    if us: return base64.b64encode(s.encode('utf-8'))
-    else: return base64.urlsafe_b64encode(zlib.compress(s.encode('utf-8')))
+    if us: return base64.b64encode(s)
+    else: return base64.urlsafe_b64encode(zlib.compress(s))
 
 def b64d(s,us):
     cnt = base64.b64decode( s.replace('-','+').replace('_','/') )
@@ -61,7 +61,7 @@ def load_echo():
 
 
 def mk_jt(mh,mb,us=True):
-    return mh + ':' + b64c(mb,us)
+    return mh + ':' + b64c(mb,us.encode('utf-8'))
 
 def parse_jt(dta,us=False):
     for n in dta.splitlines():
