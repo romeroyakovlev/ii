@@ -1,4 +1,4 @@
-import api, flt, PyRSS2Gen, sx, datetime
+import api, api.flt as flt, PyRSS2Gen, api.sx as sx, datetime
 
 
 def gen_rss(ea,url):

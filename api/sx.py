@@ -31,10 +31,6 @@ def gts():
 def rend(txt):
     out = bottle.html_escape(txt)
     out = sp(out)
-#    r1 = re.compile(r"(\b(http|https)://([-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]))")
-#    out = r1.sub(r'<a href="\1">\1</a>',out)
-#    r2 = re.compile(r"(\b(ii)://([-A-Za-z0-9+&@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&@#/%=~_()|]))")
-#    out = r2.sub(r'<a href="\3"><span class="success radius label">\3</span></a>',out)
     return out.replace('\n', '<br />')
 
 def g_opts(*n):
