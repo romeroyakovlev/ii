@@ -61,7 +61,7 @@ def load_echo():
 
 
 def mk_jt(mh,mb,us=True):
-    return mh + ':' + b64c(mb,us.encode('utf-8'))
+    return mh + ':' + b64c(mb.encode('utf-8'),us)
 
 def parse_jt(dta,us=False):
     for n in dta.splitlines():
