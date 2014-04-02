@@ -75,10 +75,11 @@ def msg_post(ea):
     else:
         redirect (redir)
 
+@route('/h/savehash/<h>')
 @route('/h/logout')
-def logout_page():
+def cookie_page(h=''):
     allstart()
-    response.set_cookie('auth','',path='/',max_age=7776000)
+    response.set_cookie('auth',h,path='/',max_age=7776000)
     return ('<html><head><meta http-equiv="refresh" content="0; /" /></head><body></body></html>')
 
 @route('/h/showhash')
