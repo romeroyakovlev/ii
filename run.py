@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import api, api.ww as ww, api.sx as sx, api.flt as flt, points, base64, api.rssg as rssg
+import api, api.sx as sx, api.flt as flt, points, api.rssg as rssg
 from api.bottle import *
 
 NODE='unnamed'
@@ -26,6 +26,12 @@ def _msg(o,ml):
         local.r.page_title =  mo.subj
         lst = [mo]
     return template('tpl/msg.html',lst=[mo] if o != 'lst' else lst,r=local.r)
+
+def send_msg(tags):
+    mo = sx.mydict(date=sx.gts())
+    mo.update(**tags)
+    return api.mkmsg(mo)
+
 
 @route('/')
 def start_page():
@@ -76,7 +82,8 @@ def msg_post(ea):
         mo['msgfrom'] = uname
         mo['msg']=mo['msg'].replace('\r\n','\n')
         mo.update(addr='%s,%s' % (NODE, uaddr),msgto=request.forms.msgto,echoarea=ea)
-        h = ww.send_msg(mo)
+        h = send_msg(mo)
+        if not h: return 'bad message'
     else:
         return 'no auth'
     redir = local.r.fz.goback or '/%s' % ea
@@ -99,18 +106,15 @@ def show_my_hash():
 
 @route('/z/m/<h:path>')
 def jt_outmsg(h):
-    response.set_header ('content-type','text/plain; charset=utf-8')
-    return '\n'.join( [api.mk_jt(x,api.raw_msg(x)) for x in h.split('/') if len(x)==20] )
+    response.set_header ('content-type','text/plain; charset=iso-8859-1')
+    nc = False if request.query.zlib == 'no' else True
+    lst = [x for x in h.split('/') if len(x) == 20]
+    return '\n'.join( [api.mk_jt(x,api.raw_msg(x),nc) for x in lst] )
 
 @route('/z/e/<names:path>')
 def index_list(names):
     response.set_header ('content-type','text/plain; charset=utf-8')
     return api.echoareas(names.split('/'))
-
-@route('/z/get/<echos:path>')
-def jt_echo(echos):
-    response.set_header ('content-type','text/plain; charset=utf-8')
-    return '\n'.join( [api.mk_jt(x,api.raw_msg(x)) for x in ww.parse_echos(echos)] )
 
 def _point_msg(pauth,tmsg):
     msgfrom, addr = points.check_hash(pauth)
@@ -122,8 +126,11 @@ def _point_msg(pauth,tmsg):
         mo.msg = '\n'.join(tmpmsg[1:])
         # а ещё лучше - засунуть это в api.toss
     if len(mo.msg.encode('utf-8')) < 64100:
-        h = ww.send_msg(mo)
-        return 'msg ok:%s: <a href="/%s">%s</a>' % (h, mo.echoarea, mo.echoarea)
+        h = send_msg(mo)
+        if h:
+            return 'msg ok:%s: <a href="/%s">%s</a>' % (h, mo.echoarea, mo.echoarea)
+        else:
+            return 'error:unknown'
     else:
         return 'msg big!'
 
@@ -157,7 +164,7 @@ def data_render(msgid):
     mo = api.get_msg(msgid)
     if mo.subj.startswith('bindata::'):
         response.set_header ('content-type', mo.subj[9:].strip())
-        return base64.b64decode( mo.msg.replace('-','+').replace('_','/') )
+        return api.b64d( mo.msg )
     else:
         return 'no data'
 

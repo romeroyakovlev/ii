@@ -2,6 +2,18 @@
 
 import base64, zlib, sx, flt
 
+def b64c(s,needcompress):
+    if needcompress: cnt = zlib.compress(s.encode('utf-8'))
+    else: cnt = s.encode('utf-8')
+    return base64.urlsafe_b64encode(cnt)
+
+def b64d(s):
+    cnt = base64.b64decode( s.replace('-','+').replace('_','/') )
+    try:
+        return zlib.decompress(cnt)
+    except:
+        return cnt
+
 def _parze(msg):
     pz = msg.splitlines()
     mo = sx.mydict()
@@ -17,7 +29,7 @@ def _out(mo):
     pz = ['','','','','','','','','']
     for i,n in enumerate(('echoarea','date','msgfrom','addr','msgto','subj'),1):
         pz[i] = unicode(mo.get(n,''))
-    pz[0] = '/'.join( [x+'/'+y for (x,y) in mo.items() if x not in ('echoarea','date','msgfrom','addr','msgto','subj','msg')] )
+    pz[0] = '/'.join( [x+'/'+y for (x,y) in [('ii','ok')] + mo.items() if x not in ('echoarea','date','msgfrom','addr','msgto','subj','msg')] )
     return '\n'.join(pz) + mo.msg
 
 
@@ -72,20 +84,18 @@ def msg_to_echoarea(msgid,echoarea):
     if echoarea: open('echo/%s' % echoarea,'ab').write(msgid + '\n')
 
 
-def mk_jt(mh,mb):
-    return mh + ':' + base64.urlsafe_b64encode( zlib.compress(mb.encode('utf-8')) )
+def mk_jt(mh,mb,nc=True):
+    return mh + ':' + b64c(mb,nc)
 
 def un_jt(txt):
     obj = txt.split(':',1)
-    return (obj[0],  zlib.decompress(base64.urlsafe_b64decode(obj[1]) ).decode('utf-8') )
+    return (obj[0],  b64d(obj[1]) )
 
 def ins_fromjt(n):
     (o,m) = un_jt(n)
     if not raw_msg(o):
         mo = _parze(m)
-        if flt.echo_flt(mo.echoarea) and len(mo.msg) < 65536:
-            new_msg(mo,o)
-            msg_to_echoarea(o,mo.echoarea)
+        mkmsg(mo,o)
     return o
 
 def parse_jt(dta):
@@ -93,7 +103,7 @@ def parse_jt(dta):
         ins_fromjt(n)
 
 def toss(msgfrom,addr,tmsg):
-    lines = zlib.decompress(base64.urlsafe_b64decode(tmsg)).decode('utf-8').splitlines()
+    lines = b64d(tmsg).decode('utf-8').splitlines()
     if flt.echo_flt(lines[0]):
         mo = sx.mydict(date=sx.gts(),msgfrom=msgfrom,addr=addr,echoarea=lines[0],msgto=lines[1],subj=lines[2],msg='\n'.join(lines[4:]))
         return mo
@@ -101,6 +111,7 @@ def toss(msgfrom,addr,tmsg):
 def mkmsg(obj,rh=None):
     if not flt.echo_flt(obj.echoarea): return
     if rh and not flt.msg_flt(rh): return
+    if len(obj.msg) > 64099: return
     h = new_msg(obj,rh)
     if h:
         msg_to_echoarea(h,obj.echoarea)
