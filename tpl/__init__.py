@@ -97,7 +97,7 @@ def data_render(msgid):
     mo = api.get_msg(msgid)
     if mo.subj.startswith('bindata::'):
         response.set_header ('content-type', mo.subj[9:].strip())
-        return api.b64d( mo.msg )
+        return api.b64d( mo.msg, True )
     else:
         return 'no data'
 
