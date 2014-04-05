@@ -19,6 +19,8 @@
     </div>
 
     <div class="small-12 columns">
+{{!api.ru('news.txt')}}
+
 %for ea,n in lst:
 %mo = api.get_msg(n[-1]) if n else ''
 
