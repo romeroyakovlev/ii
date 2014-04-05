@@ -9,7 +9,16 @@ TEMPLATE_PATH.insert(0,II_PATH)
 @route('/list.txt')
 def list_txt():
     response.set_header ('content-type','text/plain; charset=utf-8')
-    return '\n'.join(['%s:%s:%s' % t for t in api.load_echo(False)[1:]])
+    lst = api.load_echo(False)[1:]
+    if request.query.n:
+        return '\n'.join([t[0] for t in lst])
+    else:
+        return '\n'.join(['%s:%s:%s' % t for t in lst])
+
+@route('/blacklist.txt')
+def blacklist_txt():
+    response.set_header ('content-type','text/plain; charset=utf-8')
+    return api.ru('blacklist.txt')
 
 @route('/u/m/<h:path>')
 def jt_outmsg(h):
