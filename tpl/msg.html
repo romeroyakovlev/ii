@@ -23,7 +23,7 @@
 
     </div>
     <div class="small-2 columns">
-        <a href="/reply/{{mo.echoarea}}/{{mo.msgid}}"><img title="Кликни, чтобы ответить на это сообщение" src="http://ave.51t.ru/girl/width/120/hash/{{sx.hsh(mo.msgfrom.encode('utf-8'))}}" style="border-radius:8px" /></a>
+%include tpl/repbtn.tpl ea=mo.echoarea, n=mo.msgid, msgfrom=mo.msgfrom.encode('utf-8')
     </div>
 
 </div> <!-- row -->

@@ -28,7 +28,7 @@
             </a> 
                 <ul class="dropdown"> 
                     <li class="divider"></li>
-%for name,cnt in r.echolist:
+%for name,cnt,desc in r.echolist:
     <li {{!'class="active"' if r.ea == name else ''}}><a href="/{{name}}">{{name}} <i class="fa fa-fw fa-envelope"></i> {{cnt}}</a></li>
 %end
                 </ul> 

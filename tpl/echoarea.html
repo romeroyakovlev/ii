@@ -16,6 +16,8 @@
 <div class="row">
     <div class="small-12 columns">
 
+{{!api.ru(r.ea + '.header')}}
+
 %if r.getl.rev and j != j_:
 <br />
 <div data-alert class="alert-box warning radius">
@@ -47,16 +49,12 @@
             <span class="pull-right">
             <strong title="{{mo.addr}}">{{mo.msgfrom}}</strong> to {{mo.msgto}} <a href="/{{n}}" title="Ссылка на это сообщение"><i class="fa fa-eye"></i></a></p>
 
-%if mo.subj.startswith('bindata::'):
-        <a class="alert button" href="/data/{{n}}">{{mo.subj}}</a>
-%else:
             <p>{{! sx.rend(mo.msg) }}</p>
-%end
         </div>
 
     </div>
     <div class="small-2 columns">
-        <a href="/reply/{{r.ea}}/{{n}}"><img title="Кликни, чтобы ответить на это сообщение" src="http://ave.51t.ru/girl/width/120/hash/{{sx.hsh(mo.msgfrom.encode('utf-8'))}}" style="border-radius:8px" /></a>
+%include tpl/repbtn.tpl ea=r.ea, n=n, msgfrom=mo.msgfrom.encode('utf-8')
     </div>
 
 </div> <!-- row -->
