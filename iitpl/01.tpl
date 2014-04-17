@@ -11,6 +11,6 @@
     <link rel="stylesheet" href="/s/css/font-awesome.min.css" />
     <link rel="icon" type="image/png" href="/s/favicon.png" />
     <script src="/s/js/vendor/modernizr.js"></script>
-    <script src="/s/pretty/run_prettify.js"></script>
+<!--    <script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script> -->
   </head>
 

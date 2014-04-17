@@ -50,7 +50,7 @@ def _point_msg(pauth,tmsg):
     else:
         return 'msg big!'
 
-@route('/u/point/<pauth>/<tmsg>')
+@route('/u/point/<pauth>/<tmsg:path>')
 def point_msg_get(pauth,tmsg):
     return _point_msg(pauth,tmsg)
 
@@ -68,7 +68,7 @@ def get_echolist(echoarea):
     response.set_header ('content-type','text/plain; charset=utf-8')
     return api.get_echoarea(echoarea,True)
 
-import tpl
-tpl.II_PATH=II_PATH
+import iitpl
+iitpl.II_PATH=II_PATH
 
 run(host='127.0.0.1',port=62220,debug=False)

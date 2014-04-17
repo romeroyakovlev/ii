@@ -1,14 +1,20 @@
 %import api, api.sx as sx
 
-%include tpl/01.tpl r=r
+%include iitpl/01.tpl r=r
 
 <body>
+%splash = api.ru('splash.tpl')
+
 <div class="row">
+%if splash:
+{{!splash}}
+%else:
     <div class="small-9 columns">
     <h2><a href="/">ii</a> <small>персональное фидо у вас дома</small></h2>
     </div>
     <div class="small-3 columns">
         <span class="right">
+%end
             <a href="#" class="secondary button" data-dropdown="drop"><i class="fa fa-book"></i></a> 
         <ul id="drop" class="f-dropdown" data-dropdown-content> 
 %for ea,n in lst:
@@ -38,7 +44,7 @@
         </div>
     </div>
     <div class="small-2 columns">
-%include tpl/repbtn.tpl ea=ea, n=n[-1], msgfrom=mo.msgfrom.encode('utf-8')
+%include iitpl/repbtn.tpl ea=ea, n=n[-1], msgfrom=mo.msgfrom.encode('utf-8')
     </div>
 %end
 </div>

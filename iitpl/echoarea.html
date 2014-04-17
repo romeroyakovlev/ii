@@ -1,6 +1,6 @@
 %import api, api.sx as sx
 
-%include tpl/01.tpl r=r, rss=1
+%include iitpl/01.tpl r=r, rss=1
 
 %if r.getl.lim == 'big': j_ = j[-1000:]
 %elif not r.getl.lim: j_ = j[-100:]
@@ -11,7 +11,7 @@
 
 <body>
 
-%include tpl/01m.tpl r=r, ml=ml, j=j
+%include iitpl/01m.tpl r=r, ml=ml, j=j
 
 <div class="row">
     <div class="small-12 columns">
@@ -54,7 +54,7 @@
 
     </div>
     <div class="small-2 columns">
-%include tpl/repbtn.tpl ea=r.ea, n=n, msgfrom=mo.msgfrom.encode('utf-8')
+%include iitpl/repbtn.tpl ea=r.ea, n=n, msgfrom=mo.msgfrom.encode('utf-8')
     </div>
 
 </div> <!-- row -->

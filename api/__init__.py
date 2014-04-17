@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import base64, zlib, sx, flt
+import base64, sx, flt
 
 def b64c(s):
     return base64.b64encode(s)
@@ -52,7 +52,7 @@ def get_echoarea_f(name):
 
 #def get_echoarea_f(name,limit=0):
 #    bl = set(ru('blacklist.txt').splitlines())
-#    lst = [x for x in get_echoarea(name) if x not in bl][-limit]
+#    lst = [x for x in get_echoarea(name) if x not in bl][-limit:]
 
 def echoareas(names):
     out = ''
@@ -63,8 +63,16 @@ def echoareas(names):
 def echoarea_count(name):
     return len(get_echoarea(name))
 
+def _g(l):
+    for n in l:
+        x = n.strip().split(' ',1)
+        if len(x) > 1:
+            yield x
+        elif len(x) == 1 and x[0]:
+            yield x[0], ''
+
 def load_echo(filter_star=False):
-    lst = [x.split(' ',1) for x in open('server.cfg').read().splitlines()]
+    lst = [x for x in _g(open('server.cfg').read().splitlines())]
     if filter_star:
         elst = [(x,echoarea_count(x),y) for (x,y) in lst[1:] if not x.startswith('*')]
     else:
@@ -98,7 +106,14 @@ def mkmsg(obj,rh=None):
         open('echo/%s' % obj.echoarea,'ab').write(h + '\n')
         return h
 
+def _filter_msg_call(tags):
+    try:
+        import filter_msg
+        return filter_msg.check(tags)
+    except:
+        return True
+
 def point_newmsg(tags):
     mo = sx.mydict(date=sx.gts())
     mo.update(**tags)
-    return mkmsg(mo)
+    if _filter_msg_call(tags): return mkmsg(mo)
