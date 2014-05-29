@@ -85,9 +85,9 @@ def mk_jt(mh,mb):
 
 def parse_jt(dta):
     for n in dta.splitlines():
-        o,m = txt.split(':',1)
+        o,m = n.split(':',1)
         if not raw_msg(o):
-            mo = _parze( b64d(m) )
+            mo = _parze( b64d(m).decode('utf-8') )
             mkmsg(mo,o)
 
 def toss(msgfrom,addr,tmsg):
