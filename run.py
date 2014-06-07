@@ -35,7 +35,7 @@ def _point_msg(pauth,tmsg):
     msgfrom, addr = points.check_hash(pauth)
     if not addr: return 'auth error!'
     cfg = api.load_echo(False)
-    mo = api.toss(msgfrom,'%s,%s' % (cfg[0][1],addr),tmsg)
+    mo = api.toss(msgfrom,'%s,%s' % (cfg[0][1],addr),tmsg.strip())
     if mo.msg.startswith('@repto:'):
         tmpmsg = mo.msg.splitlines()
         mo.repto = tmpmsg[0][7:]

@@ -45,6 +45,8 @@
         <textarea name="msg" class="form-control" style="height:300px" placeholder="Текст сообщения"></textarea>
 %if not uname:
         <input type="text" name="msgfrom" value="" class="form-control" id="exampleInput" placeholder="auth-ключ">
+%else:
+        <input type="hidden" name="msgfrom" value="{{r.auth}}" />
 %end
 
 

@@ -23,14 +23,14 @@ def sp(s):
 
 def _ac(t):
     o = t
-    if o.rstrip().startswith('&gt;'):
-        o = u'<em style="color:green">%s</em>' % o
     if 'http://' in o:
         o = _btn(o,'http://')
     if 'https://' in o:
         o = _btn(o,'https://')
     if 'ii://' in o:
         o = _btn(o,'ii://')
+    if o.rstrip().startswith('&gt;'):
+        o = u'<em style="color:green">%s</em>' % o
     return o
 
 
@@ -40,9 +40,9 @@ def _btn(s,tag):
     for x in k[1:]:
         endl = x.split(' ',1)
         xl = None
-        for eol in '.,:()':
+        for eol in ('.',',',':','(',')','&quot;','&#039;', '&lt;', '&gt;'):
             if endl[0].endswith(eol):
-                xl = _settag(endl[0][:-1],tag) + eol + ' ' + ' '.join(endl[1:])
+                xl = _settag(endl[0][:-len(eol)],tag) + eol + ' ' + ' '.join(endl[1:])
         if xl is None: xl = _settag(endl[0],tag) + ' ' + ' '.join(endl[1:])
         buf += xl
     return buf
